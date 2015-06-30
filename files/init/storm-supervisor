@@ -1,0 +1,109 @@
+#!/bin/bash
+#
+# /etc/init.d/storm-supervisor
+#
+# Startup script for storm-supervisor
+#
+# chkconfig: 345 89 11
+# description: Starts and stops storm-supervisor
+. /etc/init.d/functions
+stormBin=/opt/storm/bin/storm
+stormSvc=$(echo $0 | cut -d'-' -f2)
+desc="Storm $stormSvc daemon"
+outFile=/opt/storm/storm-$stormSvc.out
+stormUser=gennai
+
+if [[ $EUID -ne 0 ]] ; then
+  echo "This script must be run as root" 1>&2
+  exit 1
+fi
+
+if ! [ -f $stormBin ]; then
+  echo "storm binary not found."
+  exit 5
+fi
+
+if [ -f /etc/sysconfig/storm ]; then
+  . /etc/sysconfig/storm
+fi
+
+start() {
+  if [ $stormSvc == "ui" ] ; then
+    pid=$(pgrep -f backtype.storm.ui.core)
+  else
+    pid=$(pgrep -f backtype.storm.daemon.$stormSvc)
+  fi
+  if [ ! -z "$pid" ] ; then
+    echo "storm-$stormSvc already running as process $pid"
+    exit 0
+  fi
+  echo -n "Starting $desc (storm-$stormSvc): "
+  su $stormUser -c "nohup $stormBin $stormSvc >>$outFile 2>&1 &" && success || failure $"$stormSvc start"
+  RETVAL=$?
+  echo
+  sleep 3
+
+  return $RETVAL
+}
+
+stop() {
+  echo -n "Shutting down $desc (storm-$stormSvc): "
+  if [ $stormSvc == "ui" ]; then
+    pkill -f backtype.storm.ui.core && success || failure $"$stormSvc stop"
+  else
+    pkill -f backtype.storm.daemon.$stormSvc && success || failure $"$stormSvc stop"
+  fi
+  RETVAL=$?
+  echo
+
+  return $RETVAL
+}
+
+restart() {
+    stop
+    start
+}
+
+status() {
+  if [ $stormSvc == "ui" ]; then
+     pid=$(pgrep -f backtype.storm.ui.core)
+  else
+     pid=$(pgrep -f backtype.storm.daemon.$stormSvc)
+  fi
+
+  if [ -z $pid ]; then
+    echo "storm-$stormSvc is NOT running."
+    RETVAL=1
+  else
+    echo "storm-$stormSvc is running (pid is $pid)."
+    RETVAL=0
+  fi
+}
+
+init() {
+  if [ $stormSvc == "ui" ]; then
+     pid=$(pgrep -f backtype.storm.ui.core)
+  else
+     pid=$(pgrep -f backtype.storm.daemon.$stormSvc)
+  fi
+
+  if [ ! -z $pid ]; then
+    echo "storm-$stormSvc is running (pid is $pid)."
+    RETVAL=1
+    return
+  fi
+  LOCALDIR=`grep storm.local.dir /opt/storm/conf/storm.yaml | awk -F: '{print $2}'`
+  rm -rf ${LOCALDIR}/supervisor ${LOCALDIR}/workers
+  RETVAL=$?
+}
+
+case "$1" in
+  start)   start;;
+  stop)    stop;;
+  restart) restart;;
+  status)  status;;
+  init)    init;;
+  *)       echo "Usage: $0 {start|stop|restart}"
+           RETVAL=2;;
+esac
+exit $RETVAL

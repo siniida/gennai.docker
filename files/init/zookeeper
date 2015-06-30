@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# zookeeper      zookeeper
+#
+# chkconfig: 345 86 14
+# description: zookeeper.
+# processname: zookeeper
+# pidfile: /var/local/zookeeper/zookeeper_server.pid
+# config: /opt/zookeeper/conf/zoo.cfg
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+RETVAL=0
+prog="zookeeper"
+lockfile=/var/lock/subsys/$prog
+pidfile=/var/local/zookeeper/zookeeper_server.pid
+
+if [[ $EUID -ne 0 ]] ; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+status -p $pidfile >/dev/null 2>&1
+running=$?
+
+conf_check() {
+    [ -x /opt/zookeeper/bin/zkServer.sh ] || exit 5
+    [ -d /opt/zookeeper/conf ] || exit 6
+}
+
+start() {
+    pid=$(pgrep -f QuorumPeerMain)
+    if [ ! -z "$pid" ] ; then
+        echo "already running as process $pid"
+        exit 0
+    fi
+    conf_check
+    # Start daemons.
+    echo -n $"Starting zookeeper: "
+    [ -x $CHROOT_UPDATE ] && $CHROOT_UPDATE
+    sudo -u gennai -i /opt/zookeeper/bin/zkServer.sh start 2>/dev/null 1>&2 && success || failure $"$prog start"
+    RETVAL=$?
+    sleep 3
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    echo
+    return $RETVAL
+}
+
+stop() {
+    conf_check
+    # Stop daemons.
+    echo -n $"Shutting down zookeeper: "
+    sudo -u gennai -i /opt/zookeeper/bin/zkServer.sh stop 2>/dev/null 1>&2 && success || failure $"$prog stop"
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f $lockfile $pidfile
+    echo
+    return $RETVAL
+}
+
+init() {
+    conf_check
+    pid=$(pgrep -f QuorumPeerMain)
+    if [ ! -z "$pid" ] ; then
+        echo "running as process $pid."
+        RETVAL=1
+        return
+    fi
+    DATADIR=`grep dataDir /opt/zookeeper/conf/zoo.cfg | awk -F= '{print $2}'`
+    rm -rf ${DATADIR}/*
+    RETVAL=$?
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    init)
+        init
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop}"
+        exit 2
+esac
+
+exit $?
