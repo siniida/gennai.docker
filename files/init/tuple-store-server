@@ -26,7 +26,7 @@ start() {
   fi
   echo -n "Starting $desc : "
   cd $gungnirHome
-  sudo -u $serverUser $serverBin start >>$outFile 2>&1 && success || failure $"$desc start"
+  su $serverUser -c "$serverBin start >>$outFile 2>&1" && success || failure $"$desc start"
   echo
   sleep 3
   RETVAL=$?
@@ -37,7 +37,7 @@ start() {
 stop() {
   echo -n "Shutting down $desc : "
   cd $gungnirHome
-  sudo -u $serverUser $serverBin stop >>$outFile 2>&1 && success || failure $"$desc stop"
+  su $serverUser -c "$serverBin stop >>$outFile 2>&1" && success || failure $"$desc stop"
   RETVAL=$?
   echo
 

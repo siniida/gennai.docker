@@ -43,7 +43,7 @@ start() {
     # Start daemons.
     echo -n $"Starting zookeeper: "
     [ -x $CHROOT_UPDATE ] && $CHROOT_UPDATE
-    sudo -u gennai -i /opt/zookeeper/bin/zkServer.sh start 2>/dev/null 1>&2 && success || failure $"$prog start"
+    su gennai -c "ZOO_LOG_DIR=/opt/zookeeper /opt/zookeeper/bin/zkServer.sh start 2>/dev/null 1>&2" && success || failure $"$prog start"
     RETVAL=$?
     sleep 3
     [ $RETVAL -eq 0 ] && touch $lockfile
@@ -55,7 +55,7 @@ stop() {
     conf_check
     # Stop daemons.
     echo -n $"Shutting down zookeeper: "
-    sudo -u gennai -i /opt/zookeeper/bin/zkServer.sh stop 2>/dev/null 1>&2 && success || failure $"$prog stop"
+    su gennai -c "/opt/zookeeper/bin/zkServer.sh stop 2>/dev/null 1>&2" && success || failure $"$prog stop"
     RETVAL=$?
     [ $RETVAL -eq 0 ] && rm -f $lockfile $pidfile
     echo
