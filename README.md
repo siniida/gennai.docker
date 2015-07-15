@@ -1,21 +1,19 @@
 gennai.docker
 =========
 
-all in one gennai for docker.
+gennai cluster.
 
-## How to
+## How
 
-    $ docker build -t gennai .
-    $ docker run -ti --rm gennai /bin/bash
+    $ git clone https://github.com/siniida/gennai.docker
+    $ cd gennai.docker
+    $ ./rebuild.sh
+    $ docker-compose up
 
-## in container
+## other terminal
 
-    # service mongod start
-    # service zookeeper start
-    # service kafka start
-    # service storm-nimbus start
-    # service storm-supervisor start
-    # service gungnir-server start
-    # service tuple-store-server start
-    #
-    # /opt/gungnir-client/bin/gungnir -u root -p gennai
+    $ ./client.sh
+    Gungnir server connecting ...
+    Gungnir version 0.0.1 build at 20150612-102002
+    Welcome root (Account ID: 55a720459b97170012b1ebf2)
+    gungnir>
