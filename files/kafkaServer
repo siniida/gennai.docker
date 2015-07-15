@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-cmd=$1
-shift
-cd "/opt/kafka"
-./bin/kafka-server-${cmd}.sh "$@"
