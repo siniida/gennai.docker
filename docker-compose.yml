@@ -13,7 +13,9 @@ nimbus:
 supervisor:
   image: siniida/storm-supervisor
   links:
+    - mongo:mongo
     - zookeeper:zk
+    - kafka:kafka
     - nimbus:nimbus
 gungnir:
   image: siniida/gungnir-server

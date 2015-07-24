@@ -18,9 +18,10 @@ cat /opt/gungnir-server/conf/gungnir.yaml
 echo "===== gungnir.yaml (tuple-store-server) ====="
 
 sed -i -e "s/WARN/INFO/g" /opt/gungnir-server/conf/logback.xml
-cd /opt/gungnir-server/bin
-./tuple-store-server.sh start
 
-sleep 15
-
+cd /opt/gungnir-server
+su gennai -c "./bin/tuple-store-server.sh start"
+su gennai -c "touch /opt/gungnir-server/logs/gungnir.log"
 tail -f /opt/gungnir-server/logs/gungnir.log
+
+# EOF
