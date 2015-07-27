@@ -1,0 +1,33 @@
+mongo:
+  image: mongo:3.0.3
+zookeeper:
+  image: siniida/zookeeper
+kafka:
+  image: siniida/kafka
+  links:
+    - zookeeper:zk
+nimbus:
+  image: siniida/storm-nimbus
+  links:
+    - zookeeper:zk
+supervisor:
+  image: siniida/storm-supervisor
+  links:
+    - mongo:mongo
+    - zookeeper:zk
+    - kafka:kafka
+    - nimbus:nimbus
+gungnir:
+  image: siniida/gungnir-server
+  links:
+    - mongo:mongo
+    - zookeeper:zk
+    - kafka:kafka
+    - nimbus:nimbus
+tuplestore:
+  image: siniida/tuple-store-server
+  links:
+    - mongo:mongo
+    - zookeeper:zk
+    - kafka:kafka
+    - nimbus:nimbus
