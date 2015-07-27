@@ -3,7 +3,7 @@ gennai.docker
 
 standalone gennai for docker.
 
-## How to
+## How
 
     $ docker build -t gennai .
     $ docker run -ti --rm gennai/standalone
@@ -14,3 +14,13 @@ standalone gennai for docker.
     Gungnir version 0.0.1 build at 20150612-102002
     Welcome root (Account ID: 7c072c309b544d129cdaf091557e0733)
     gungnir>
+
+## other mode
+
+* all in one mode
+
+    $ git checkout all-in-one
+
+* cluster mode (require docker-compose)
+
+    $ git checkout cluster
