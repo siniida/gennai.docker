@@ -19,3 +19,13 @@ all in one gennai for docker.
     # service tuple-store-server start
     #
     # /opt/gungnir-client/bin/gungnir -u root -p gennai
+
+## other mode
+
+* standalone mode
+
+    $ git checkout standalone
+
+* cluster mode (require docker-compose)
+
+    $ git checkout cluster
