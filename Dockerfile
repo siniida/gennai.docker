@@ -9,8 +9,8 @@ ENV JAVA_HOME /usr/lib/jvm/jre
 
 
 # gungnir
-RUN curl https://s3-ap-northeast-1.amazonaws.com/gennai/gungnir-server-0.0.1-20150612.tar.gz | tar zx -C /opt
-RUN curl https://s3-ap-northeast-1.amazonaws.com/gennai/gungnir-client-0.0.1-20150612.tar.gz | tar zx -C /opt
+RUN curl https://s3-ap-northeast-1.amazonaws.com/gennai/gungnir-server-0.0.1-20150814.tar.gz | tar zx -C /opt
+RUN curl https://s3-ap-northeast-1.amazonaws.com/gennai/gungnir-client-0.0.1-20150814.tar.gz | tar zx -C /opt
 RUN ln -s /opt/gungnir-server-0.0.1 /opt/gungnir-server
 RUN ln -s /opt/gungnir-client-0.0.1 /opt/gungnir-client
 RUN chown -R root:root /opt/gungnir-server-0.0.1
