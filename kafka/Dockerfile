@@ -1,5 +1,5 @@
 FROM centos:6
-MAINTAINER siniida
+MAINTAINER siniida <sinpukyu@gmail.com>
 
 RUN yum update -y
 RUN yum install -y tar
