@@ -12,7 +12,11 @@ RUN ln -s /opt/zookeeper-3.4.6 /opt/zookeeper
 RUN mkdir /opt/zookeeper/data
 RUN chown -R root:root /opt/zookeeper-3.4.6
 RUN mv /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg
-RUN sed -i -e 's/^\(dataDir\)=.*/\1=\/opt\/zookeeper\/data/g' /opt/zookeeper/conf/zoo.cfg
+RUN sed -i \
+  -e 's/^\(dataDir\)=.*/\1=\/opt\/zookeeper\/data/g' \
+  -e 's/^#\(autopurge.snapRetainCount=.*\)/\1/g' \
+  -e 's/^#\(autopurge.purgeInterval=.*\)/\1/g' \
+  /opt/zookeeper/conf/zoo.cfg
 
 ENV JAVA_HOME /usr/java/default
 
