@@ -1,5 +1,7 @@
 # siniida/storm
 
+[![](https://badge.imagelayers.io/siniida/storm:latest.svg)](https://imagelayers.io/?images=siniida/storm:latest 'Get your own badge on imagelayers.io')
+
 for gennai cluster. ([gennai.docker](https://github.com/siniida/gennai.docker))
 
 ## Require

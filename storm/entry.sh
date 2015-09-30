@@ -16,10 +16,11 @@ then
 	# get zookeeper address from env.
 	for i in `env | grep 2181_TCP_ADDR | cut -d = -f 2`
 	do
-		ZK_STR="${ZK_STR},${i}:2181"
-		echo "ZooKeeper: ${ZK_STR:1}"
-		sed -i -e "s/.*\(storm\.zookeeper\.servers\):.*/\1:${ZK_STR:1}/g" ${CONFIG}
+		ZK_STR="${ZK_STR}\n    - \"${i}\""
+		ZK_STR2="${ZK_STR2},${i}:2181"
 	done
+	echo "ZooKeeper: ${ZK_STR2:1}"
+	sed -i -e "s/.*\(storm\.zookeeper\.servers\):.*/\1:${ZK_STR}/g" ${CONFIG}
 fi
 
 ### nimbus host
@@ -39,18 +40,21 @@ echo "storm.local.hostname: `hostname -i`" >> ${CONFIG}
 if [ -n "${ROLE}" ]
 then
 	case ${ROLE} in
-		nimbus)
-			exec /opt/storm/bin/storm nimbus
+		nimbus|n)
+			/opt/storm/bin/storm nimbus
 			;;
-		supervisor)
-			exec /opt/storm/bin/storm supervisor
+		supervisor|s)
+			/opt/storm/bin/storm supervisor
 			;;
-		ui)
-			exec /opt/storm/bin/storm ui
+		ui|u)
+			/opt/storm/bin/storm ui
+			;;
+		*)
+			echo "[ERROR] ${ROLE} not found." >&2
+			exit 1
 			;;
 	esac
 fi
 
 exec $@
-
 # EOF
