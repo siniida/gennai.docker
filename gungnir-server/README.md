@@ -6,21 +6,19 @@ for [gennai](http://genn.ai/) cluster. ([gennai.docker](https://github.com/sinii
 
 ## Mode
 
-* [local](#local)
-* [distributed](#distributed)
-
-### local mode <a name="local"></a>
+### local mode
 
     $ docker run -d \
         -e MODE=local \
         siniida/gungnir-server
 
 
-### distributed mode <a name="distributed"></a>
+### distributed mode
 
 run gungnir-server. (default)
 
     $ docker run -d \
+        --hostname gungnir \
         -e MODE=distributed \
         -e MONGO=[MongoDBContainerName]:[port] \
         -e ZOOKEEPER=[ZKContainerName]:[port] \
@@ -31,6 +29,7 @@ run gungnir-server. (default)
     or
     
     $ docker run -d \
+        --hostname gungnir1 \
         -e MODE=distributed \
         -e ROLE=gungnir-server \
         -e MONGO=[MongoDBContainerName1]:[port],[MongoDBContainerName2]:[port],.. \
@@ -42,6 +41,7 @@ run gungnir-server. (default)
 run tuple-store-server.
 
     $ docker run -d \
+        --hostname tuplestore \
         -e MODE=distributed \
         -e ROLE=tuplestore \
         -e MONGO=[MongoDBContainerName]:[port] \

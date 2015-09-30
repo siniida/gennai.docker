@@ -17,7 +17,7 @@ RUN chown -R gennai:gennai /opt/gungnir-server-0.0.1
 
 RUN yum clean all
 
-ENV JAVA_HOME /usr/lib/jvm/jre
+ENV JAVA_HOME /usr/java/default
 
 EXPOSE 7100 7200 7300
 
