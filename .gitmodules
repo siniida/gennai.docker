@@ -6,7 +6,10 @@
 	url = git://github.com/siniida/docker-zookeeper.git
 [submodule "kafka"]
 	path = kafka
-	url = git://github.com/siniida/docker-kafka
+	url = git://github.com/siniida/docker-kafka.git
 [submodule "gungnir-server"]
 	path = gungnir-server
-	url = git://github.com/siniida/docker-gungnir-server
+	url = git://github.com/siniida/docker-gungnir-server.git
+[submodule "gungnir-client"]
+	path = gungnir-client
+	url = git://github.com/siniida/docker-gungnir-client.git
