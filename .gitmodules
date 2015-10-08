@@ -1,3 +1,6 @@
 [submodule "storm"]
 	path = storm
 	url = git://github.com/siniida/docker-storm.git
+[submodule "zookeeper"]
+	path = zookeeper
+	url = git://github.com/siniida/docker-zookeeper.git
