@@ -4,30 +4,52 @@ zookeeper:
   image: siniida/zookeeper
 kafka:
   image: siniida/kafka
+  environment:
+    - ZOOKEEPERS=zookeeper:2181
   links:
-    - zookeeper:zk
+    - zookeeper
 nimbus:
-  image: siniida/storm-nimbus
+  image: siniida/storm
+  environment:
+    - ROLE=nimbus
+    - ZOOKEEPERS=zookeeper:2181
   links:
-    - zookeeper:zk
+    - zookeeper
 supervisor:
-  image: siniida/storm-supervisor
+  image: siniida/storm
+  environment:
+    - ROLE=supervisor
+    - ZOOKEEPERS=zookeeper:2181
+    - NIMBUS=nimbus
   links:
-    - mongo:mongo
-    - zookeeper:zk
-    - kafka:kafka
-    - nimbus:nimbus
+    - zookeeper
+    - nimbus
 gungnir:
   image: siniida/gungnir-server
+  environment:
+    - ROLE=gungnir
+    - MODE=distributed
+    - MONGO=mongo:27017
+    - ZOOKEEPER=zookeeper:2181
+    - KAKFA=kafka:9092
+    - NIMBUS=nimbus
   links:
-    - mongo:mongo
-    - zookeeper:zk
-    - kafka:kafka
-    - nimbus:nimbus
+    - mongo
+    - zookeeper
+    - kafka
+    - nimbus
+    - supervisor
 tuplestore:
-  image: siniida/tuple-store-server
+  image: siniida/gungnir-server
+  environment:
+    - ROLE=tuple-store
+    - MODE=distributed
+    - MONGO=mongo:27017
+    - ZOOKEEPER=zookeeper:2181
+    - KAKFA=kafka:9092
+    - NIMBUS=nimbus
   links:
-    - mongo:mongo
-    - zookeeper:zk
-    - kafka:kafka
-    - nimbus:nimbus
+    - mongo
+    - zookeeper
+    - kafka
+    - nimbus
