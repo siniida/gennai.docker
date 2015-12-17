@@ -31,7 +31,7 @@ gungnir:
     - MODE=distributed
     - MONGO=mongo:27017
     - ZOOKEEPER=zookeeper:2181
-    - KAKFA=kafka:9092
+    - KAFKA=kafka:9092
     - NIMBUS=nimbus
   links:
     - mongo
@@ -46,7 +46,7 @@ tuplestore:
     - MODE=distributed
     - MONGO=mongo:27017
     - ZOOKEEPER=zookeeper:2181
-    - KAKFA=kafka:9092
+    - KAFKA=kafka:9092
     - NIMBUS=nimbus
   links:
     - mongo
