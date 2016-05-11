@@ -1,22 +1,22 @@
 mongo:
   image: mongo:3.0.3
 zookeeper:
-  image: siniida/zookeeper
+  image: siniida/zookeeper:3.4.6-alpine
 kafka:
-  image: siniida/kafka
+  image: siniida/kafka:0.8.2.1-alpine
   environment:
     - ZOOKEEPERS=zookeeper:2181
   links:
     - zookeeper
 nimbus:
-  image: siniida/storm
+  image: siniida/storm:0.9.4-alpine
   environment:
     - ROLE=nimbus
     - ZOOKEEPERS=zookeeper:2181
   links:
     - zookeeper
 supervisor:
-  image: siniida/storm
+  image: siniida/storm:0.9.4-alpine
   environment:
     - ROLE=supervisor
     - ZOOKEEPERS=zookeeper:2181
@@ -25,7 +25,7 @@ supervisor:
     - zookeeper
     - nimbus
 gungnir:
-  image: siniida/gungnir-server
+  image: siniida/gungnir-server:0.0.1-alpine
   environment:
     - ROLE=gungnir
     - MODE=distributed
@@ -40,7 +40,7 @@ gungnir:
     - nimbus
     - supervisor
 tuplestore:
-  image: siniida/gungnir-server
+  image: siniida/gungnir-server:0.0.1-alpine
   environment:
     - ROLE=tuple-store
     - MODE=distributed
